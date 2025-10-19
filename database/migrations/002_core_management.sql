@@ -1,0 +1,104 @@
+-- Core management: categories, tags, pages, menus, media, audit, devices, translations
+
+-- Categories
+CREATE TABLE IF NOT EXISTS categories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  slug VARCHAR(191) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tags
+CREATE TABLE IF NOT EXISTS tags (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  slug VARCHAR(191) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Content relations
+CREATE TABLE IF NOT EXISTS content_categories (
+  content_id INT NOT NULL,
+  category_id INT NOT NULL,
+  PRIMARY KEY (content_id, category_id),
+  FOREIGN KEY (content_id) REFERENCES content(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS content_tags (
+  content_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY (content_id, tag_id),
+  FOREIGN KEY (content_id) REFERENCES content(id) ON DELETE CASCADE,
+  FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Pages (CMS-like)
+CREATE TABLE IF NOT EXISTS pages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(200) NOT NULL,
+  slug VARCHAR(191) NOT NULL UNIQUE,
+  body TEXT,
+  published TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Media assets
+CREATE TABLE IF NOT EXISTS media_assets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  url VARCHAR(255) NOT NULL,
+  type VARCHAR(50) DEFAULT 'image',
+  alt_text VARCHAR(255) DEFAULT '',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Menus
+CREATE TABLE IF NOT EXISTS menus (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  code VARCHAR(100) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS menu_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  menu_id INT NOT NULL,
+  parent_id INT,
+  label VARCHAR(150) NOT NULL,
+  url VARCHAR(255) NOT NULL,
+  sort_order INT DEFAULT 0,
+  FOREIGN KEY (menu_id) REFERENCES menus(id) ON DELETE CASCADE,
+  FOREIGN KEY (parent_id) REFERENCES menu_items(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Devices (for notifications integration)
+CREATE TABLE IF NOT EXISTS devices (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  platform ENUM('web','android','ios') DEFAULT 'web',
+  token VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Audit logs
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  action VARCHAR(100) NOT NULL,
+  entity_type VARCHAR(100) NOT NULL,
+  entity_id INT,
+  details TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Translations (i18n)
+CREATE TABLE IF NOT EXISTS translations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  `key` VARCHAR(191) NOT NULL,
+  locale VARCHAR(10) NOT NULL,
+  `value` TEXT NOT NULL,
+  UNIQUE KEY uniq_key_locale (`key`, locale)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

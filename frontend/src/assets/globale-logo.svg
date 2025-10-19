@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768" role="img" aria-label="Globale logo">
+  <defs>
+    <style>
+      .accent { fill: #800020; }
+      .light { fill: #ffffff; }
+      .text { font: 64px/1.2 'Segoe UI', Roboto, Arial, sans-serif; fill: #800020; letter-spacing: 3px; }
+    </style>
+  </defs>
+  <rect class="light" x="0" y="0" width="768" height="768"/>
+  <!-- Stylized D -->
+  <path class="accent" d="M200 140 H 420 A 230 230 0 1 1 420 628 H 200 Z"/>
+  <!-- Diagonal slash -->
+  <polygon class="light" points="120,180 360,420 320,460 100,240"/>
+  <!-- Inner counter of D to create the hollow look -->
+  <path class="light" d="M300 308 H 420 A 150 150 0 1 1 420 460 H 300 Z"/>
+
+  <!-- Title text -->
+  <text x="384" y="700" text-anchor="middle" class="text">GLOBALE</text>
+</svg>

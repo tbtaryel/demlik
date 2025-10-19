@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#800020" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Dia</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Disable service worker in dev to avoid Vite HMR websocket issues
+      // Also unregister any existing SW registrations when on localhost
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+          if (isLocalhost) {
+            navigator.serviceWorker.getRegistrations().then((regs) => {
+              regs.forEach((r) => r.unregister());
+            }).catch(() => {});
+          } else {
+            navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

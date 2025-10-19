@@ -1,0 +1,10 @@
+{
+  "name": "Dia",
+  "short_name": "Dia",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#800020",
+  "orientation": "portrait"
+}

@@ -1,0 +1,2 @@
+ALTER TABLE users
+  ADD COLUMN chat_muted TINYINT(1) NOT NULL DEFAULT 0 AFTER role;

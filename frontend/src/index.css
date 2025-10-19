@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #800020;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background-color: #ffffff;
+}
+
+body {
+  /* Nötr metin rengi: okunabilirliği artırır ve görünümü bozulmayı engeller */
+  color: #111827;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--accent);
+}
+
+a, a:visited, a:hover, a:active { color: var(--accent); }
+
+.text-accent { color: var(--accent) !important; }
+
+.btn {
+  @apply inline-flex items-center justify-center px-4 py-3 rounded-md text-accent border border-accent bg-white hover:opacity-90 active:scale-[0.98] transition;
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center px-4 py-3 rounded-md text-white bg-accent border border-transparent hover:opacity-90 active:scale-[0.98] transition;
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+  border-color: var(--accent) !important;
+}
+
+.card {
+  @apply rounded-xl border border-accent/20 bg-white shadow-sm overflow-hidden;
+}

@@ -1,0 +1,21 @@
+-- Block trades tables
+CREATE TABLE IF NOT EXISTS block_securities (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  symbol VARCHAR(32) NOT NULL,
+  name VARCHAR(191) NULL,
+  buy_price DECIMAL(16,4) NOT NULL,
+  min_qty INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_symbol (symbol)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS block_trades (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  symbol VARCHAR(32) NOT NULL,
+  price DECIMAL(16,4) NOT NULL,
+  qty INT NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'open', -- open|closed|canceled
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_symbol (symbol),
+  FOREIGN KEY (symbol) REFERENCES block_securities(symbol) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
