@@ -1,15 +1,20 @@
 import axios from 'axios';
 
-const rawBase = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) || 'http://localhost:4000/api';
+// Prefer env var; if missing, fall back to same-origin
+const rawBase = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) || '';
 const normalizeBase = (url) => {
   try {
     let u = String(url || '').trim();
-    if (!u) return 'http://localhost:4000/api';
+    if (!u) {
+      const origin = (typeof window !== 'undefined' && window.location && window.location.origin) ? window.location.origin : 'http://localhost:4000';
+      return `${origin}/api`;
+    }
     if (u.endsWith('/')) u = u.slice(0, -1);
     if (!/\/api$/.test(u)) u = `${u}/api`;
     return u;
   } catch (_) {
-    return 'http://localhost:4000/api';
+    const origin = (typeof window !== 'undefined' && window.location && window.location.origin) ? window.location.origin : 'http://localhost:4000';
+    return `${origin}/api`;
   }
 };
 const baseURL = normalizeBase(rawBase);

@@ -1,0 +1,2 @@
+# Replit configuration
+run = "bash start.sh"

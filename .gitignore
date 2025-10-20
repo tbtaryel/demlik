@@ -21,6 +21,11 @@ Thumbs.db
 # Cache
 .cache/
 
-# Env files (left unignored to keep run-ready; consider private repo)
-# backend/.env
-# frontend/.env
+# Env files (kept out of repo)
+.env
+*.env
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.development
+!backend/.env.example

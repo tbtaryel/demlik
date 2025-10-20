@@ -41,6 +41,7 @@ try {
 
 app.get('/', (req, res) => res.json({ status: 'ok', app: 'dia', version: '0.1.0' }));
 
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/content', contentRoutes);
@@ -58,6 +59,26 @@ app.use('/api/finance', financeRoutes);
 app.use('/api/block-trades', blockTradesRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/bist-graph', bistGraphRoutes);
+
+// Serve frontend build (Vite) for SPA on same origin
+try {
+  const distDir = path.resolve('frontend', 'dist');
+  if (fs.existsSync(distDir)) {
+    app.use(express.static(distDir));
+    app.get('*', (req, res, next) => {
+      // Only handle non-API requests
+      if (req.path.startsWith('/api')) return next();
+      try {
+        const indexFile = path.join(distDir, 'index.html');
+        return res.sendFile(indexFile);
+      } catch (err) {
+        return next();
+      }
+    });
+  }
+} catch (e) {
+  console.warn('Frontend dist serving failed:', e.message);
+}
 
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
 
